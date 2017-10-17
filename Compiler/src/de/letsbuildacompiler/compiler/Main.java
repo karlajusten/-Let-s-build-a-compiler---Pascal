@@ -1,3 +1,10 @@
+// https://www.youtube.com/playlist?list=PLOfFbVTfT2vbJ9qiw_6fWwBAmJAYV4iUm
+// Reproduzido por Karla Aparecida Justen 2017.2
+
+//
+// Comand to compile the grammar on ANTLR4
+// java -jar ../lib/antlr-4.7-complete.jar -package de.letsbuildacompiler.parser -o ../src/de/letsbuildacompiler/parser -no-listener -visitor Demo.g4
+
 package de.letsbuildacompiler.compiler;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -12,13 +19,16 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		ANTLRInputStream input = new ANTLRFileStream("code.demo");
+		System.out.println(compile(input));
+	}
+	
+	public static String compile(ANTLRInputStream input){
 		DemoLexer lexer = new DemoLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		DemoParser parser = new DemoParser(tokens);
 		
-		ParseTree tree = parser.addition();
-		System.out.println(createJasminFile(new MyVisitor().visit(tree)));
-
+		ParseTree tree = parser.program();
+		return createJasminFile(new MyVisitor().visit(tree));
 	}
 	
 	public static String createJasminFile( String instructions){
@@ -28,9 +38,7 @@ public class Main {
 				"	.limit stack 100\n" +
 				"	.limit locals 100\n" +
 				"\n" +
-				"	getstatic java/lang/System/out Ljava/io/PrintStream;\n" +
 				instructions + "\n" +
-				"	invokevirtual java/io/PrintStream/println(I)V\n" +
 				"	return \n" +
 				"	\n" +
 				".end method";

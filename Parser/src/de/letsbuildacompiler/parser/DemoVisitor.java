@@ -11,17 +11,50 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code Zahl}
-	 * labeled alternative in {@link DemoParser#addition}.
+	 * Visit a parse tree produced by {@link DemoParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitZahl(DemoParser.ZahlContext ctx);
+	T visitProgram(DemoParser.ProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Div}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDiv(DemoParser.DivContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumber(DemoParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Mult}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMult(DemoParser.MultContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Plus}
-	 * labeled alternative in {@link DemoParser#addition}.
+	 * labeled alternative in {@link DemoParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPlus(DemoParser.PlusContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Minus}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinus(DemoParser.MinusContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#println}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintln(DemoParser.PrintlnContext ctx);
 }

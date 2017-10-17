@@ -1,0 +1,89 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 0 0 134 182
+
+0.3 setlinewidth
+%% x y w h highlight
+/highlight {
+        4 dict begin
+        /h exch def
+        /w exch def
+        /y exch def
+        /x exch def
+        gsave
+        newpath
+        x y moveto
+        0 h rlineto     % up to left corner
+        w 0 rlineto     % to upper right corner
+        0 h neg rlineto % to lower right corner
+        w neg 0 rlineto % back home to lower left corner
+        closepath
+        .95 .83 .82 setrgbcolor
+        fill
+        grestore
+        end
+} def
+/ArialMT findfont 11 scalefont setfont
+95.058 165.440 moveto
+80.661 148.440 lineto
+80.661 132.352 moveto
+30.658 115.352 lineto
+80.661 132.352 moveto
+89.631 115.352 lineto
+89.631 99.264 moveto
+61.189 82.264 lineto
+61.189 66.176 moveto
+30.887 49.176 lineto
+30.887 33.088 moveto
+30.887 16.088 lineto
+61.189 66.176 moveto
+74.383 49.176 lineto
+61.189 66.176 moveto
+91.490 49.176 lineto
+89.631 99.264 moveto
+102.826 82.264 lineto
+89.631 99.264 moveto
+118.074 82.264 lineto
+80.661 132.352 moveto
+130.663 115.352 lineto
+95.058 165.440 moveto
+109.455 148.440 lineto
+10.572 104.264 moveto
+(println\() show
+stroke
+114.576 71.176 moveto
+(3) show
+stroke
+62.720 137.352 moveto
+(println) show
+stroke
+27.389 5.000 moveto
+(2) show
+stroke
+31.302 71.176 moveto
+(expression) show
+stroke
+71.457 170.440 moveto
+(program) show
+stroke
+59.744 104.264 moveto
+(expression) show
+stroke
+87.992 38.088 moveto
+(3) show
+stroke
+128.518 104.264 moveto
+(\)) show
+stroke
+107.602 137.352 moveto
+(;) show
+stroke
+100.076 71.176 moveto
+(*) show
+stroke
+69.774 38.088 moveto
+(+) show
+stroke
+1.000 38.088 moveto
+(expression) show
+stroke
+%%Trailer

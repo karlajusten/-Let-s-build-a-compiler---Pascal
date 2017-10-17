@@ -1,7 +1,17 @@
 grammar Demo;
 
-addition: links=addition '+' rechts=ZAHL #Plus
-		| zahl=ZAHL  #Zahl
-		;
+program: (println ';')+;
 
-ZAHL: [0-9]+;
+
+expression: left=expression '/' right=expression #Div
+		  | left=expression '*' right=expression #Mult
+          | left=expression '-' right=expression #Minus
+          | left=expression '+' right=expression #Plus
+		  | number=NUMBER  #Number
+		  ;
+
+println: 'println(' argument=expression ')';
+
+NUMBER: [0-9]+;
+WHITESPACE: [ \t\n\r]+ -> skip;
+

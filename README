@@ -16,5 +16,5 @@ descompactei e peguei o jasmin.jar e coloquei na pasta lib (criada agora) na pas
 $ java -jar lib/jasmin.jar helloWorld.j 
 $ java HelloWorld
 
-
+No final do video 7 apresenta como gerar árvore de derivação...
 
