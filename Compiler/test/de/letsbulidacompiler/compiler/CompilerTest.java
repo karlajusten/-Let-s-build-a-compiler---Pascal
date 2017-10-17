@@ -3,6 +3,7 @@ package de.letsbulidacompiler.compiler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import de.letsbuildacompiler.compiler.Main;
+import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
+import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
 import jasmin.ClassFile;
 
 public class CompilerTest {
@@ -48,11 +51,40 @@ public class CompilerTest {
 	  // execution
 	  String actualOutput = compileAndRun(code);
 	  
-	  //ecaluation
+	  //evaluation
 	  Assert.assertEquals(actualOutput, expectedText);
 	  
   }
   
+  	@Test(expectedExceptions = UndeclaredVariableException.class,
+			expectedExceptionsMessageRegExp = "1:8 undeclared variable <x>")
+	public void compilingCode_throwsUndeclaredVariableException_ifReadingUndefinedVariable() throws Exception {
+		// execution
+		compileAndRun("println(x);");
+		
+		// evaluation performed by expected exception
+	}
+  
+  	@Test(expectedExceptions = UndeclaredVariableException.class,
+			expectedExceptionsMessageRegExp = "1:0 undeclared variable <x>")
+	public void compilingCode_throwsUndeclaredVariableException_ifWrintingUndefinedVariable() throws Exception {
+		// execution
+		compileAndRun("x = 5;");
+		
+		// evaluation performed by expected exception
+	}
+  	
+  	@Test(expectedExceptions = VariableAlreadyDefinedException.class,
+			expectedExceptionsMessageRegExp = "2:4 variable already defined: <x>")
+	public void compilingCode_throwsVariableAlreadyDefinedException_whenDefiningAlreadyDefinedVariable() throws Exception {
+		// execution
+		compileAndRun("int x;" + System.lineSeparator() +
+		              "int x;");
+		
+		// evaluation performed by expected exception
+	}
+  
+  	
   @DataProvider
   public Object[][] provide_code_expectedText() {
 		return new Object[][]{
@@ -109,10 +141,9 @@ public class CompilerTest {
 	ClassFile classFile = new ClassFile();
 	classFile.readJasmin(new StringReader(code), "", false);
 	Path outputPath = tempDir.resolve(classFile.getClassName() + ".class");
-	classFile.write(Files.newOutputStream(outputPath));
-	/*try(OutputStream output = Files.newOutputStream(outputPath)) {
+	try(OutputStream output = Files.newOutputStream(outputPath)) {
 		classFile.write(output);
-	}*/
+	}
 	return runJavaClass(tempDir, classFile.getClassName());
   }
 

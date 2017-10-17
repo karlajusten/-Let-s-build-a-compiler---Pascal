@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Default test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>14/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>17/0/0</td>
 </tr><tr>
-<td>Started on:</td><td>Fri Oct 13 13:52:16 BRT 2017</td>
+<td>Started on:</td><td>Fri Oct 13 18:20:47 BRT 2017</td>
 </tr>
-<tr><td>Total time:</td><td>1 seconds (1600 ms)</td>
+<tr><td>Total time:</td><td>1 seconds (1220 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -75,90 +75,354 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
+<td title='de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsUndeclaredVariableException_ifReadingUndefinedVariable()'><b>compilingCode_throwsUndeclaredVariableException_ifReadingUndefinedVariable</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest</td>
+<td><div><pre>de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException: 1:8 undeclared variable &lt;x&gt;
+	at de.letsbuildacompiler.compiler.MyVisitor.requireVariableIndex(MyVisitor.java:84)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVariable(MyVisitor.java:78)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVariable(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$VariableContext.accept(DemoParser.java:238)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitPrintln(MyVisitor.java:28)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitPrintln(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$PrintlnContext.accept(DemoParser.java:516)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitStatement(DemoBaseVisitor.java:27)
+	at de.letsbuildacompiler.parser.DemoParser$StatementContext.accept(DemoParser.java:157)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitProgram(DemoBaseVisitor.java:20)
+	at de.letsbuildacompiler.parser.DemoParser$ProgramContext.accept(DemoParser.java:100)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.Main.compile(Main.java:33)
+	at de.letsbulidacompiler.compiler.CompilerTest.compileAndRun(CompilerTest.java:140)
+	at de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsUndeclaredVariableException_ifReadingUndefinedVariable(CompilerTest.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:877)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1201)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:776)
+	at org.testng.TestRunner.run(TestRunner.java:634)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:425)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:420)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:385)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:334)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1318)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1243)
+	at org.testng.TestNG.runSuites(TestNG.java:1161)
+	at org.testng.TestNG.run(TestNG.java:1129)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</pre></div><a href='#' onClick='toggleBox("stack-trace2011986105", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace2011986105'><pre>de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException: 1:8 undeclared variable &lt;x&gt;
+	at de.letsbuildacompiler.compiler.MyVisitor.requireVariableIndex(MyVisitor.java:84)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVariable(MyVisitor.java:78)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVariable(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$VariableContext.accept(DemoParser.java:238)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitPrintln(MyVisitor.java:28)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitPrintln(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$PrintlnContext.accept(DemoParser.java:516)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitStatement(DemoBaseVisitor.java:27)
+	at de.letsbuildacompiler.parser.DemoParser$StatementContext.accept(DemoParser.java:157)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitProgram(DemoBaseVisitor.java:20)
+	at de.letsbuildacompiler.parser.DemoParser$ProgramContext.accept(DemoParser.java:100)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.Main.compile(Main.java:33)
+	at de.letsbulidacompiler.compiler.CompilerTest.compileAndRun(CompilerTest.java:140)
+	at de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsUndeclaredVariableException_ifReadingUndefinedVariable(CompilerTest.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:877)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1201)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:776)
+	at org.testng.TestRunner.run(TestRunner.java:634)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:425)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:420)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:385)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:334)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1318)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1243)
+	at org.testng.TestNG.runSuites(TestNG.java:1161)
+	at org.testng.TestNG.run(TestNG.java:1129)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</pre></div></td>
+<td>0</td>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
+<tr>
+<td title='de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsUndeclaredVariableException_ifWrintingUndefinedVariable()'><b>compilingCode_throwsUndeclaredVariableException_ifWrintingUndefinedVariable</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest</td>
+<td><div><pre>de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException: 1:0 undeclared variable &lt;x&gt;
+	at de.letsbuildacompiler.compiler.MyVisitor.requireVariableIndex(MyVisitor.java:84)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitAssignment(MyVisitor.java:73)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitAssignment(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$AssignmentContext.accept(DemoParser.java:475)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitStatement(DemoBaseVisitor.java:27)
+	at de.letsbuildacompiler.parser.DemoParser$StatementContext.accept(DemoParser.java:157)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitProgram(DemoBaseVisitor.java:20)
+	at de.letsbuildacompiler.parser.DemoParser$ProgramContext.accept(DemoParser.java:100)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.Main.compile(Main.java:33)
+	at de.letsbulidacompiler.compiler.CompilerTest.compileAndRun(CompilerTest.java:140)
+	at de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsUndeclaredVariableException_ifWrintingUndefinedVariable(CompilerTest.java:72)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:877)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1201)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:776)
+	at org.testng.TestRunner.run(TestRunner.java:634)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:425)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:420)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:385)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:334)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1318)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1243)
+	at org.testng.TestNG.runSuites(TestNG.java:1161)
+	at org.testng.TestNG.run(TestNG.java:1129)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</pre></div><a href='#' onClick='toggleBox("stack-trace249155636", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace249155636'><pre>de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException: 1:0 undeclared variable &lt;x&gt;
+	at de.letsbuildacompiler.compiler.MyVisitor.requireVariableIndex(MyVisitor.java:84)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitAssignment(MyVisitor.java:73)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitAssignment(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$AssignmentContext.accept(DemoParser.java:475)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitStatement(DemoBaseVisitor.java:27)
+	at de.letsbuildacompiler.parser.DemoParser$StatementContext.accept(DemoParser.java:157)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitProgram(DemoBaseVisitor.java:20)
+	at de.letsbuildacompiler.parser.DemoParser$ProgramContext.accept(DemoParser.java:100)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.Main.compile(Main.java:33)
+	at de.letsbulidacompiler.compiler.CompilerTest.compileAndRun(CompilerTest.java:140)
+	at de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsUndeclaredVariableException_ifWrintingUndefinedVariable(CompilerTest.java:72)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:877)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1201)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:776)
+	at org.testng.TestRunner.run(TestRunner.java:634)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:425)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:420)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:385)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:334)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1318)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1243)
+	at org.testng.TestNG.runSuites(TestNG.java:1161)
+	at org.testng.TestNG.run(TestNG.java:1129)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</pre></div></td>
+<td>0</td>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
+<tr>
+<td title='de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsVariableAlreadyDefinedException_whenDefiningAlreadyDefinedVariable()'><b>compilingCode_throwsVariableAlreadyDefinedException_whenDefiningAlreadyDefinedVariable</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest</td>
+<td><div><pre>de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException: 2:4 variable already defined: &lt;x&gt;
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVarDeclaration(MyVisitor.java:64)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVarDeclaration(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$VarDeclarationContext.accept(DemoParser.java:434)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitStatement(DemoBaseVisitor.java:27)
+	at de.letsbuildacompiler.parser.DemoParser$StatementContext.accept(DemoParser.java:157)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitProgram(DemoBaseVisitor.java:20)
+	at de.letsbuildacompiler.parser.DemoParser$ProgramContext.accept(DemoParser.java:100)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.Main.compile(Main.java:33)
+	at de.letsbulidacompiler.compiler.CompilerTest.compileAndRun(CompilerTest.java:140)
+	at de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsVariableAlreadyDefinedException_whenDefiningAlreadyDefinedVariable(CompilerTest.java:81)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:877)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1201)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:776)
+	at org.testng.TestRunner.run(TestRunner.java:634)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:425)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:420)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:385)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:334)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1318)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1243)
+	at org.testng.TestNG.runSuites(TestNG.java:1161)
+	at org.testng.TestNG.run(TestNG.java:1129)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</pre></div><a href='#' onClick='toggleBox("stack-trace246399377", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace246399377'><pre>de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException: 2:4 variable already defined: &lt;x&gt;
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVarDeclaration(MyVisitor.java:64)
+	at de.letsbuildacompiler.compiler.MyVisitor.visitVarDeclaration(MyVisitor.java:1)
+	at de.letsbuildacompiler.parser.DemoParser$VarDeclarationContext.accept(DemoParser.java:434)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitStatement(DemoBaseVisitor.java:27)
+	at de.letsbuildacompiler.parser.DemoParser$StatementContext.accept(DemoParser.java:157)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visitChildren(AbstractParseTreeVisitor.java:46)
+	at de.letsbuildacompiler.parser.DemoBaseVisitor.visitProgram(DemoBaseVisitor.java:20)
+	at de.letsbuildacompiler.parser.DemoParser$ProgramContext.accept(DemoParser.java:100)
+	at org.antlr.v4.runtime.tree.AbstractParseTreeVisitor.visit(AbstractParseTreeVisitor.java:18)
+	at de.letsbuildacompiler.compiler.Main.compile(Main.java:33)
+	at de.letsbulidacompiler.compiler.CompilerTest.compileAndRun(CompilerTest.java:140)
+	at de.letsbulidacompiler.compiler.CompilerTest.compilingCode_throwsVariableAlreadyDefinedException_whenDefiningAlreadyDefinedVariable(CompilerTest.java:81)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:877)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1201)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:776)
+	at org.testng.TestRunner.run(TestRunner.java:634)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:425)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:420)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:385)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:334)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1318)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1243)
+	at org.testng.TestNG.runSuites(TestNG.java:1161)
+	at org.testng.TestNG.run(TestNG.java:1129)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</pre></div></td>
+<td>0</td>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
+<tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(1+2);, 3
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(1+2+42);, 45
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(1); println(2);, 1
 2
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(3-2);, 1
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(2*3);, 6
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(6/2);, 3
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(7/2);, 3
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(8/2*4);, 16
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(2+3*3);, 11
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(9-2*3);, 3
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: println(8-2+5);, 11
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: int foo; foo = 42; println(foo);, 42
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: int foo; foo = 42; println(foo+2);, 44
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 <tr>
 <td title='de.letsbulidacompiler.compiler.CompilerTest.runningCode_outputExpectedText()'><b>runningCode_outputExpectedText</b><br>Test class: de.letsbulidacompiler.compiler.CompilerTest<br>Parameters: int a; int b; a = 2; b = 5; println(a+b);, 7
 </td>
 <td></td>
 <td>0</td>
-<td>de.letsbulidacompiler.compiler.CompilerTest@58651fd0</td></tr>
+<td>de.letsbulidacompiler.compiler.CompilerTest@5419f379</td></tr>
 </table><p>
 </body>
 </html>

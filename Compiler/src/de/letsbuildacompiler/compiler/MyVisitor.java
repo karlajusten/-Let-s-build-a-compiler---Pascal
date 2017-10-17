@@ -3,18 +3,20 @@ package de.letsbuildacompiler.compiler;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.antlr.v4.runtime.Token;
+
 import de.letsbuildacompiler.parser.DemoBaseVisitor;
 import de.letsbuildacompiler.parser.DemoParser.AssignmentContext;
 import de.letsbuildacompiler.parser.DemoParser.DivContext;
 import de.letsbuildacompiler.parser.DemoParser.MinusContext;
 import de.letsbuildacompiler.parser.DemoParser.MultContext;
-//import de.letsbuildacompiler.parser.DemoParser.AdditionContext;
 import de.letsbuildacompiler.parser.DemoParser.NumberContext;
 import de.letsbuildacompiler.parser.DemoParser.PlusContext;
 import de.letsbuildacompiler.parser.DemoParser.PrintlnContext;
-//import de.letsbuildacompiler.parser.DemoParser.ZahlContext;
 import de.letsbuildacompiler.parser.DemoParser.VarDeclarationContext;
 import de.letsbuildacompiler.parser.DemoParser.VariableContext;
+import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
+import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
 
 public class MyVisitor extends DemoBaseVisitor<String>{
 	
@@ -58,6 +60,9 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	@Override
 	public String visitVarDeclaration(VarDeclarationContext ctx) {
+		if (variables.containsKey(ctx.varName.getText())) {
+			throw new VariableAlreadyDefinedException(ctx.varName);
+		}
 		variables.put(ctx.varName.getText(), variables.size());
 		return "";
 	}
@@ -65,12 +70,20 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	@Override
 	public String visitAssignment(AssignmentContext ctx) {
 		return visit(ctx.expr) + "\n" +
-				"istore " + variables.get(ctx.varName.getText());
+				"istore " + requireVariableIndex(ctx.varName);
 	}
 	
 	@Override
 	public String visitVariable(VariableContext ctx) {
-		return "iload " + variables.get(ctx.varName.getText());
+		return "iload " + requireVariableIndex(ctx.varName);
+	}
+	
+	private int requireVariableIndex(Token varNameToken) {
+		Integer varIndex = variables.get(varNameToken.getText());
+		if (varIndex == null) {
+			throw new UndeclaredVariableException(varNameToken);
+		}
+		return varIndex;
 	}
 	
 	@Override

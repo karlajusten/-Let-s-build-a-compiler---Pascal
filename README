@@ -21,3 +21,7 @@ No final do video 7 apresenta como gerar árvore de derivação...
 regras semanticas:
 - ordem de execução da expresão numérica; resolvido de forma sintatica;
 - declaração de variaveis numéricas;
+- excessões implementadas:
+	- não permitir declarar variavel sem tipo;
+	- não deixar imprimir variaval sem estar declarada;
+	- não permitir declarar a mesma variavel (com mesmo nome) mais de uma vez;
