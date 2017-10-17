@@ -1,0 +1,20 @@
+Exercícios baseados nos videos: https://www.youtube.com/playlist?list=PLOfFbVTfT2vbJ9qiw_6fWwBAmJAYV4iUm
+
+1# video:
+	// crir doc's Demo.g4 e code.demo
+	$ java -jar antlr-4.7-complete.jar Demo.g4
+	$ javac -cp antlr-4.7-complete.jar *.java
+	$ java -cp .:antlr-4.7-complete.jar org.antlr.v4.runtime.misc.TestRig Demo addition -gui code.demo
+
+3# video
+	$ java -jar ../lib/antlr-4.7-complete.jar -package de.letsbuildacompiler.parser -o ../src/de/letsbuildacompiler/parser -no-listener -visitor Demo.g4
+
+5# video:
+- http://jasmin.sourceforge.net/
+descompactei e peguei o jasmin.jar e coloquei na pasta lib (criada agora) na pasta compiler.
+	
+$ java -jar lib/jasmin.jar helloWorld.j 
+$ java HelloWorld
+
+
+
