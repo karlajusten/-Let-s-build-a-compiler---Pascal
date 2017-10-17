@@ -106,9 +106,9 @@ public class CompilerTest {
 			{"int foo; foo = 42; println(foo+2);", "44" + System.lineSeparator()},
 			{"int a; int b; a = 2; b = 5; println(a+b);", "7" + System.lineSeparator()},
 			
-			/*{"int randomNumber() { return 4; } println(randomNumber());", "4" + System.lineSeparator()},
+			{"int randomNumber() { return 4; } println(randomNumber());", "4" + System.lineSeparator()},
 			
-			{"int randomNumber() {\n" + 
+			/*{"int randomNumber() {\n" + 
 					"  int i;\n" + 
 					"  i = 4;\n" + 
 					"  return i;\n" + 
@@ -137,20 +137,21 @@ public class CompilerTest {
 
 
   private String compileAndRun(String code) throws Exception {
-	code = Main.compile(new ANTLRInputStream(code));
-	ClassFile classFile = new ClassFile();
-	classFile.readJasmin(new StringReader(code), "", false);
-	Path outputPath = tempDir.resolve(classFile.getClassName() + ".class");
-	try(OutputStream output = Files.newOutputStream(outputPath)) {
-		classFile.write(output);
-	}
-	return runJavaClass(tempDir, classFile.getClassName());
-  }
+		code = Main.compile(new ANTLRInputStream(code));
+		System.out.println(code);
+		ClassFile classFile = new ClassFile();
+		classFile.readJasmin(new StringReader(code), "", false);
+		Path outputPath = tempDir.resolve(classFile.getClassName() + ".class");
+		try(OutputStream output = Files.newOutputStream(outputPath)) {
+			classFile.write(output);
+		}
+		return runJavaClass(tempDir, classFile.getClassName());
+	  }
 
-  private String runJavaClass(Path dir, String className) throws Exception {
-	Process process = Runtime.getRuntime().exec(new String[]{"java", "-cp", dir.toString(), className});
-	try(InputStream in = process.getInputStream()) {
-		return new Scanner(in).useDelimiter("\\A").next();
-	}
-  }
+	  private String runJavaClass(Path dir, String className) throws Exception {
+		Process process = Runtime.getRuntime().exec(new String[]{"java", "-cp", dir.toString(), className});
+		try(InputStream in = process.getInputStream()) {
+			return new Scanner(in).useDelimiter("\\A").next();
+		}
+	  }
 }

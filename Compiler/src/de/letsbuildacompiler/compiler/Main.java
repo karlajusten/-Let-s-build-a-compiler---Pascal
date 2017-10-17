@@ -36,16 +36,8 @@ public class Main {
 	public static String createJasminFile( String instructions){
 		return ".class public HelloWorld\n" +
 				".super java/lang/Object\n" +
-				".method public static main([Ljava/lang/String;)V\n" +
-				"	.limit stack 100\n" +
-				"	.limit locals 100\n" +
 				"\n" +
-				instructions + "\n" +
-				"	return \n" +
-				"	\n" +
-				".end method";
-		
-		
+				instructions;
 	}
 
 }

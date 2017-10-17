@@ -17,6 +17,20 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(DemoParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code MainStatement}
+	 * labeled alternative in {@link DemoParser#programPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMainStatement(DemoParser.MainStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ProgPartFunctionDefinition}
+	 * labeled alternative in {@link DemoParser#programPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgPartFunctionDefinition(DemoParser.ProgPartFunctionDefinitionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DemoParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -65,6 +79,13 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMinus(DemoParser.MinusContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code funcCallExpression}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncCallExpression(DemoParser.FuncCallExpressionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DemoParser#varDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -82,4 +103,16 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrintln(DemoParser.PrintlnContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#functionDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionDefinition(DemoParser.FunctionDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#functionCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCall(DemoParser.FunctionCallContext ctx);
 }
