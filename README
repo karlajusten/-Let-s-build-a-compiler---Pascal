@@ -18,3 +18,6 @@ $ java HelloWorld
 
 No final do video 7 apresenta como gerar árvore de derivação...
 
+regras semanticas:
+- ordem de execução da expresão numérica; resolvido de forma sintatica;
+- declaração de variaveis numéricas;

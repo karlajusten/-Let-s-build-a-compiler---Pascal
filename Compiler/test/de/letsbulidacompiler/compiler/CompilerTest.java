@@ -68,13 +68,13 @@ public class CompilerTest {
 			{"println(8/2*4);", "16" + System.lineSeparator()},
 			{"println(2+3*3);", "11" + System.lineSeparator()},
 			{"println(9-2*3);", "3" + System.lineSeparator()},
-			/*{"println(8-2+5);", "11" + System.lineSeparator()},
+			{"println(8-2+5);", "11" + System.lineSeparator()},
 			
 			{"int foo; foo = 42; println(foo);", "42" + System.lineSeparator()},
 			{"int foo; foo = 42; println(foo+2);", "44" + System.lineSeparator()},
 			{"int a; int b; a = 2; b = 5; println(a+b);", "7" + System.lineSeparator()},
 			
-			{"int randomNumber() { return 4; } println(randomNumber());", "4" + System.lineSeparator()},
+			/*{"int randomNumber() { return 4; } println(randomNumber());", "4" + System.lineSeparator()},
 			
 			{"int randomNumber() {\n" + 
 					"  int i;\n" + 

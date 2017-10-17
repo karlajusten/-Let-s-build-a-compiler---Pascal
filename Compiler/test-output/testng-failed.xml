@@ -7,7 +7,7 @@
         <methods>
           <include name="creatTempDir"/>
           <include name="deleteTempDir"/>
-          <include name="runningCode_outputExpectedText" invocation-numbers="7"/>
+          <include name="runningCode_outputExpectedText" invocation-numbers="11 12 13"/>
         </methods>
       </class> <!-- de.letsbulidacompiler.compiler.CompilerTest -->
     </classes>

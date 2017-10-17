@@ -17,12 +17,25 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(DemoParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link DemoParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(DemoParser.StatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Div}
 	 * labeled alternative in {@link DemoParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDiv(DemoParser.DivContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Variable}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariable(DemoParser.VariableContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link DemoParser#expression}.
@@ -51,6 +64,18 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMinus(DemoParser.MinusContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#varDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDeclaration(DemoParser.VarDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignment(DemoParser.AssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DemoParser#println}.
 	 * @param ctx the parse tree
