@@ -110,6 +110,12 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionDefinition(DemoParser.FunctionDefinitionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link DemoParser#parameterDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameterDeclaration(DemoParser.ParameterDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DemoParser#statementList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -121,4 +127,10 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionCall(DemoParser.FunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#expressionList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionList(DemoParser.ExpressionListContext ctx);
 }
