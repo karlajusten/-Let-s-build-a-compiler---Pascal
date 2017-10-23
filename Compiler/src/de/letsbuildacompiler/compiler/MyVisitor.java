@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.letsbuildacompiler.parser.DemoBaseVisitor;
 import de.letsbuildacompiler.parser.DemoParser.AssignmentContext;
+import de.letsbuildacompiler.parser.DemoParser.BranchContext;
 import de.letsbuildacompiler.parser.DemoParser.DivContext;
 import de.letsbuildacompiler.parser.DemoParser.FunctionCallContext;
 import de.letsbuildacompiler.parser.DemoParser.FunctionDefinitionContext;
@@ -30,6 +31,7 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	private Map<String, Integer> variables = new HashMap<>();
 	private final FunctionList definedFunctions;
+	private int branchCounter = 0;
 	
 	public MyVisitor(FunctionList definedFunctions) {
 		if (definedFunctions == null){
@@ -81,6 +83,35 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		}
 		variables.put(ctx.varName.getText(), variables.size());
 		return "";
+	}
+	
+	@Override
+	public String visitBranch(BranchContext ctx) {
+		String conditionInstructions = visit(ctx.condition);
+		String onTrueInstructions = visit(ctx.onTrue);
+		String onFalseInstructions = visit(ctx.onFalse);
+		int branchNum = branchCounter;
+		++branchCounter;
+		
+		/* 
+		 * Structure Example:
+		 * 	ldc 0
+		 * 	ifne true
+		 * 	ldc 81
+		 * 	goto endif
+		 * true: 
+		 *  ldc 42
+		 * endif:
+		 *  invokestatic Demo/print(i)V
+		 */
+		return conditionInstructions + "\n" +
+			"ifne ifTrue" + branchNum + "\n" +
+			onFalseInstructions + "\n" +
+			"goto endIf" + branchNum + "\n" +
+			"ifTrue" + branchNum + ":\n" +
+			onTrueInstructions + "\n" +
+			"endIf" + branchNum + ":\n";
+
 	}
 	
 	@Override
