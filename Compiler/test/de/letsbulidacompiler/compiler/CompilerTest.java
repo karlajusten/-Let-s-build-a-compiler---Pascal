@@ -108,13 +108,13 @@ public class CompilerTest {
 			
 			{"int randomNumber() { return 4; } println(randomNumber());", "4" + System.lineSeparator()},
 			
-			/*{"int randomNumber() {\n" + 
+			{"int randomNumber() {\n" + 
 					"  int i;\n" + 
 					"  i = 4;\n" + 
 					"  return i;\n" + 
 					"}\n" + 
 					"println(randomNumber());", "4" + System.lineSeparator()},
-					
+			
 			{"int randomNumber() {\n" + 
 					"  int i;\n" + 
 					"  i = 4;\n" + 
@@ -123,10 +123,10 @@ public class CompilerTest {
 					"int i;\n" + 
 					"i = 42;\n" + 
 					"println(randomNumber());\n" + 
-					"println(i);",
+					"println(i);", 
 						"4" + System.lineSeparator() +
 						"42" + System.lineSeparator()},
-			{"int add(int a, int b) {\n" + 
+			/*{"int add(int a, int b) {\n" + 
 					"  return a+b;\n" + 
 					"}\n" + 
 					"println(add(5,8));",

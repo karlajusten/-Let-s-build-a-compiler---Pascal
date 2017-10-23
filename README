@@ -25,3 +25,4 @@ regras semanticas:
 	- não permitir declarar variavel sem tipo;
 	- não deixar imprimir variaval sem estar declarada;
 	- não permitir declarar a mesma variavel (com mesmo nome) mais de uma vez;
+	- permitir ter variaveis dentro de um método, com o mesmo nome de uma variavel fora do método;
