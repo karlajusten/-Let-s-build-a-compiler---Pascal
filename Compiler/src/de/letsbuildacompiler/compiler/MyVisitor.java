@@ -21,9 +21,11 @@ import de.letsbuildacompiler.parser.DemoParser.MultContext;
 import de.letsbuildacompiler.parser.DemoParser.NumberContext;
 import de.letsbuildacompiler.parser.DemoParser.OrContext;
 import de.letsbuildacompiler.parser.DemoParser.PlusContext;
+import de.letsbuildacompiler.parser.DemoParser.PrintContext;
 import de.letsbuildacompiler.parser.DemoParser.PrintlnContext;
 import de.letsbuildacompiler.parser.DemoParser.ProgramContext;
 import de.letsbuildacompiler.parser.DemoParser.RelationalContext;
+import de.letsbuildacompiler.parser.DemoParser.StringContext;
 import de.letsbuildacompiler.parser.DemoParser.VarDeclarationContext;
 import de.letsbuildacompiler.parser.DemoParser.VariableContext;
 import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
@@ -33,6 +35,7 @@ import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException
 public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	private Map<String, Integer> variables = new HashMap<>();
+	private JvmStack jvmStack = new JvmStack();
 	private final FunctionList definedFunctions;
 	private int branchCounter = 0;
 	private int compareCount = 0;
@@ -48,33 +51,62 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 
 	@Override
 	public String visitPrintln(PrintlnContext ctx) {
+		String argumentInstructions = visit(ctx.argument);
+		DataType type = jvmStack.pop();
 		return "  getstatic java/lang/System/out Ljava/io/PrintStream;\n" + 
-				 visit(ctx.argument) + "\n" + 
-				"  invokevirtual java/io/PrintStream/println(I)V\n";
+				 argumentInstructions + "\n" + 
+				"  invokevirtual java/io/PrintStream/println(" +
+				 type.getJvmType() + ")V\n";
+		}
+	
+	@Override
+	public String visitPrint(PrintContext ctx) {
+		String argumentInstructions = visit(ctx.argument);
+		DataType type = jvmStack.pop();
+		return "  getstatic java/lang/System/out Ljava/io/PrintStream;\n" + 
+				 argumentInstructions + "\n" + 
+				"  invokevirtual java/io/PrintStream/print(" +
+				 type.getJvmType() + ")V\n";
 	}
 	
 	@Override
 	public String visitPlus(PlusContext ctx) {
-		return visitChildren(ctx) + "\n" +
+		String instructions = visitChildren(ctx) + "\n" +
 			"iadd";
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
+		return instructions;
 	}
 	
 	@Override
 	public String visitMinus(MinusContext ctx) {
-		return visitChildren(ctx) + "\n" +
+		String instructions = visitChildren(ctx) + "\n" +
 				"isub";
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
+		return instructions;
 	}
 	
 	@Override
 	public String visitDiv(DivContext ctx) {
-		return visitChildren(ctx) + "\n" +
+		String instructions = visitChildren(ctx) + "\n" +
 				"idiv";
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
+		return instructions;
 	}
 	
 	@Override
 	public String visitMult(MultContext ctx) {
-		return visitChildren(ctx) + "\n" +
+		String instructions = visitChildren(ctx) + "\n" +
 				"imul";
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
+		return instructions;
 	}
 	
 	@Override
@@ -98,44 +130,58 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		default:
 			throw new IllegalArgumentException("Unkown operator: " + ctx.operator.getText());
 		}
-		return visitChildren(ctx) + "\n" +
-			   jumpInstruction + " onTrue" + compareNum + "\n" +
-		 	   "ldc 0\n" +
-		 	   "goto onFalse" + compareNum + "\n" +
-		 	   "onTrue" + compareNum + ":\n" + 
-		 	   "ldc 1\n" +
-		 	   "onFalse"  + compareNum + ":"; 
+		String instructions = visitChildren(ctx) + "\n" +
+				   jumpInstruction + " onTrue" + compareNum + "\n" +
+			 	   "ldc 0\n" +
+			 	   "goto onFalse" + compareNum + "\n" +
+			 	   "onTrue" + compareNum + ":\n" + 
+			 	   "ldc 1\n" +
+			 	   "onFalse"  + compareNum + ":"; 
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
+		return instructions;
 	}
 	
 	@Override
 	public String visitNumber(NumberContext ctx) {
+		jvmStack.push(DataType.INT);
 		return "ldc " +ctx.number.getText();
 	}
 	
 	@Override
+	public String visitString(StringContext ctx) {
+		jvmStack.push(DataType.STRING);
+		return "ldc " + ctx.txt.getText();
+	}
+	
+	@Override
 	public String visitVariable(VariableContext ctx) {
+		jvmStack.push(DataType.INT);
 		return "iload " + requireVariableIndex(ctx.varName);
 	}
 		
+	
+	/* 
+	 * Structure Example:
+	 * 	ldc 0
+	 * 	ifne true
+	 * 	ldc 81
+	 * 	goto endif
+	 * true: 
+	 *  ldc 42
+	 * endif:
+	 *  invokestatic Demo/print(i)V
+	 */
 	@Override
 	public String visitBranch(BranchContext ctx) {
 		String conditionInstructions = visit(ctx.condition);
+		jvmStack.pop();
 		String onTrueInstructions = visit(ctx.onTrue);
 		String onFalseInstructions = visit(ctx.onFalse);
 		int branchNum = branchCounter;
 		++branchCounter;
 		
-		/* 
-		 * Structure Example:
-		 * 	ldc 0
-		 * 	ifne true
-		 * 	ldc 81
-		 * 	goto endif
-		 * true: 
-		 *  ldc 42
-		 * endif:
-		 *  invokestatic Demo/print(i)V
-		 */
 		return conditionInstructions + "\n" +
 			"ifne ifTrue" + branchNum + "\n" +
 			onFalseInstructions + "\n" +
@@ -161,6 +207,10 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		instructions += "invokestatic HelloWorld/" + ctx.funcName.getText() + "(";
 		instructions += stringRepeat("I", numberOfParameters);
 		instructions += ")I";
+		for(int i = 0; i < numberOfParameters; ++i ){
+			jvmStack.pop();
+		}
+		jvmStack.push(DataType.INT);
 		return instructions;
 	}
 	
@@ -182,6 +232,10 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		int andNum = andCounter;
 		++andCounter;
 		
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
+		
 		return  left + "\n" + 
 				"ifeq onAndFalse" + andNum + "\n" + 
 				right + "\n" + 
@@ -194,7 +248,7 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	}
 	
 	
-	/**
+	/*
 	 * ldc a
 		ifne onOrTrue
 		ldc b
@@ -211,6 +265,10 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		String right = visit(ctx.right);
 		int orNum = orCounter ;
 		++orCounter;
+		
+		jvmStack.pop();
+		jvmStack.pop();
+		jvmStack.push(DataType.INT);
 		
 		return left + "\n" + 
 				"ifne onOrTrue" + orNum + "\n" + 
@@ -234,14 +292,18 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	@Override
 	public String visitAssignment(AssignmentContext ctx) {
-		return visit(ctx.expr) + "\n" +
+		String instructions = visit(ctx.expr) + "\n" +
 				"istore " + requireVariableIndex(ctx.varName);
+		jvmStack.pop();
+		return instructions;
 	}
 		
 	@Override
 	public String visitFunctionDefinition(FunctionDefinitionContext ctx) {
 		Map<String, Integer> oldVariables = variables;
+		JvmStack oldJvmStack = jvmStack;
 		variables = new HashMap<>();
+		jvmStack = new JvmStack();
 		visit(ctx.params);
 		String statementInstructions = visit(ctx.statements);
 		String result = ".method public static " + ctx.funcName.getText() + "(";
@@ -254,7 +316,9 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 				visit(ctx.returnValue) + "\n" +
 				"ireturn\n" +
 				".end method";
+		jvmStack.pop();
 		variables = oldVariables;
+		jvmStack = oldJvmStack;
 		return result;
 	}
 	

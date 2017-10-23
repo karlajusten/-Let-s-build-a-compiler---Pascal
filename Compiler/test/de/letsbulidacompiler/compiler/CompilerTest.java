@@ -213,7 +213,11 @@ public class CompilerTest {
 			
 			example("operators/and-skip-right", "0" + System.lineSeparator() + "0" + System.lineSeparator()),
 			
-			example("operators/or-skip-right", "1" + System.lineSeparator() + "1" + System.lineSeparator())
+			example("operators/or-skip-right", "1" + System.lineSeparator() + "1" + System.lineSeparator()),
+			
+			{"print", "print(42);", "42"},
+			
+			{"print string literal", "print(\"hello world\");", "hello world"},
 		
 			
 		};

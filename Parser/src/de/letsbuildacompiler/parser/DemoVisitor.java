@@ -98,6 +98,13 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRelational(DemoParser.RelationalContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code String}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitString(DemoParser.StringContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Plus}
 	 * labeled alternative in {@link DemoParser#expression}.
 	 * @param ctx the parse tree
@@ -136,6 +143,12 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrintln(DemoParser.PrintlnContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#print}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrint(DemoParser.PrintContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DemoParser#functionDefinition}.
 	 * @param ctx the parse tree
