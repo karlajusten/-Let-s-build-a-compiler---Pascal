@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 
 import de.letsbuildacompiler.compiler.Main;
 import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
+import de.letsbulidacompiler.compiler.exceptions.UndefinedFunctionException;
 import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
 import jasmin.ClassFile;
 
@@ -80,6 +81,15 @@ public class CompilerTest {
 		// execution
 		compileAndRun("int x;" + System.lineSeparator() +
 		              "int x;");
+		
+		// evaluation performed by expected exception
+	}
+  	
+  	@Test(expectedExceptions = UndefinedFunctionException.class,
+			expectedExceptionsMessageRegExp = "1:8 call to undefined function: <someUndefinedFunction>")
+	public void compilingCode_throwsUndefinedFunctionException_whenCallingUndefinedFunction() throws Exception {
+		// execution
+		compileAndRun("println(someUndefinedFunction());");
 		
 		// evaluation performed by expected exception
 	}

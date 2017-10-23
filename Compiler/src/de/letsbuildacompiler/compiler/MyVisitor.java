@@ -1,7 +1,9 @@
 package de.letsbuildacompiler.compiler;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -21,12 +23,22 @@ import de.letsbuildacompiler.parser.DemoParser.ProgramContext;
 import de.letsbuildacompiler.parser.DemoParser.VarDeclarationContext;
 import de.letsbuildacompiler.parser.DemoParser.VariableContext;
 import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
+import de.letsbulidacompiler.compiler.exceptions.UndefinedFunctionException;
 import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
 
 public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	private Map<String, Integer> variables = new HashMap<>();
+	private final Set<String> definedFunctions;
 	
+	public MyVisitor(Set<String> definedFunctions) {
+		if (definedFunctions == null){
+			this.definedFunctions = Collections.emptySet();
+		} else {
+			this.definedFunctions = definedFunctions;
+		}
+	}
+
 	@Override
 	public String visitPrintln(PrintlnContext ctx) {
 		return "  getstatic java/lang/System/out Ljava/io/PrintStream;\n" + 
@@ -85,6 +97,10 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	@Override
 	public String visitFunctionCall(FunctionCallContext ctx) {
+		if (!definedFunctions.contains(ctx.funcName.getText())){
+			throw new UndefinedFunctionException(ctx.funcName);
+		}
+			
 		String instructions = "";
 		String argumentsInstructions = visit(ctx.arguments);
 		if (argumentsInstructions != null) {

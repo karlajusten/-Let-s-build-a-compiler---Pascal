@@ -9,6 +9,7 @@ package de.letsbuildacompiler.compiler;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.util.Set;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -30,7 +31,8 @@ public class Main {
 		DemoParser parser = new DemoParser(tokens);
 		
 		ParseTree tree = parser.program();
-		return createJasminFile(new MyVisitor().visit(tree));
+		Set<String> definedFunctions = new FunctionDefinitionFinder().visit(tree);
+		return createJasminFile(new MyVisitor(definedFunctions).visit(tree));
 	}
 	
 	public static String createJasminFile( String instructions){
