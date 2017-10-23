@@ -6,8 +6,9 @@
       <class name="de.letsbulidacompiler.compiler.CompilerTest">
         <methods>
           <include name="creatTempDir"/>
+          <include name="compilingCode_throwsFunctionAlreadyDefinedException_whenDefiningFunctionTwice"/>
           <include name="deleteTempDir"/>
-          <include name="compilingCode_throwsUndefinedFunctionException_whenCallingUndefinedFunction"/>
+          <include name="runningCode_outputExpectedText" invocation-numbers="14 15 16 17 18"/>
         </methods>
       </class> <!-- de.letsbulidacompiler.compiler.CompilerTest -->
     </classes>

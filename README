@@ -28,3 +28,7 @@ regras semanticas:
 	- permitir ter variaveis dentro de um método, com o mesmo nome de uma variavel fora do método;
 	- reconhcer como declaração dos paramatos de métodos como variaveis, acrescentando na tabela de simbolos;
 	- garantir que metodos chamados já foram declarados e implementados;
+	- ter duas funções com o mesmo nome, apenas se diferenciando pelos parametros;
+	- não permite que a mesma função seja definida mais de uma vez (nome e parametros iguais);
+
+

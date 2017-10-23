@@ -17,6 +17,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import de.letsbuildacompiler.compiler.Main;
+import de.letsbulidacompiler.compiler.exceptions.FunctionAlreadyDefinedException;
 import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
 import de.letsbulidacompiler.compiler.exceptions.UndefinedFunctionException;
 import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
@@ -93,6 +94,16 @@ public class CompilerTest {
 		
 		// evaluation performed by expected exception
 	}
+  	
+  	@Test(expectedExceptions = FunctionAlreadyDefinedException.class,
+			expectedExceptionsMessageRegExp = "2:4 function already defined: <x>")
+	public void compilingCode_throwsFunctionAlreadyDefinedException_whenDefiningFunctionTwice() throws Exception {
+		// execution
+		compileAndRun("int x() { return 42; }\n" +
+					  "int x() { return 42; }");
+		
+		// evaluation performed by expected exception
+	}
   
   	
   @DataProvider
@@ -136,11 +147,19 @@ public class CompilerTest {
 					"println(i);", 
 						"4" + System.lineSeparator() +
 						"42" + System.lineSeparator()},
+			
 			{"int add(int a, int b) {\n" + 
 					"  return a+b;\n" + 
 					"}\n" + 
 					"println(add(5,8));",
-					"13" + System.lineSeparator()}
+					"13" + System.lineSeparator()},
+			
+			{"int x() { return 0; }\n" +
+					"int x(int a) { return a; }\n" +
+					"println(x());\n" +
+					"println(x(42));",
+					"0" + System.lineSeparator() +
+					"42" + System.lineSeparator()},
 						
 		};
 	}
