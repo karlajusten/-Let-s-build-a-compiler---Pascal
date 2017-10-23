@@ -31,5 +31,6 @@ regras semanticas:
 	- ter duas funções com o mesmo nome, apenas se diferenciando pelos parametros;
 	- não permite que a mesma função seja definida mais de uma vez (nome e parametros iguais);
 	- fez if funcionar;
+	- operatios <, <=, >, >=
 
 

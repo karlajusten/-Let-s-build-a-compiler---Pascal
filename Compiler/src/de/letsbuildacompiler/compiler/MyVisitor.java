@@ -21,6 +21,7 @@ import de.letsbuildacompiler.parser.DemoParser.NumberContext;
 import de.letsbuildacompiler.parser.DemoParser.PlusContext;
 import de.letsbuildacompiler.parser.DemoParser.PrintlnContext;
 import de.letsbuildacompiler.parser.DemoParser.ProgramContext;
+import de.letsbuildacompiler.parser.DemoParser.RelationalContext;
 import de.letsbuildacompiler.parser.DemoParser.VarDeclarationContext;
 import de.letsbuildacompiler.parser.DemoParser.VariableContext;
 import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
@@ -32,6 +33,7 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	private Map<String, Integer> variables = new HashMap<>();
 	private final FunctionList definedFunctions;
 	private int branchCounter = 0;
+	private int compareCount = 0;
 	
 	public MyVisitor(FunctionList definedFunctions) {
 		if (definedFunctions == null){
@@ -69,6 +71,36 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	public String visitMult(MultContext ctx) {
 		return visitChildren(ctx) + "\n" +
 				"imul";
+	}
+	
+	@Override
+	public String visitRelational(RelationalContext ctx) {
+		int compareNum = compareCount;
+		++compareCount;
+		String jumpInstruction;
+		switch(ctx.operator.getText()){
+		case "<":
+			jumpInstruction = "if_icmplt";
+			break;
+		case "<=":
+			jumpInstruction = "if_icmple";
+			break;
+		case ">":
+			jumpInstruction = "if_icmpgt";
+			break;
+		case ">=":
+			jumpInstruction = "if_icmpge";
+			break;
+		default:
+			throw new IllegalArgumentException("Unkown operator: " + ctx.operator.getText());
+		}
+		return visitChildren(ctx) + "\n" +
+			   jumpInstruction + " onTrue" + compareNum + "\n" +
+		 	   "ldc 0\n" +
+		 	   "goto onFalse" + compareNum + "\n" +
+		 	   "onTrue" + compareNum + ":\n" + 
+		 	   "ldc 1\n" +
+		 	   "onFalse"  + compareNum + ":"; 
 	}
 	
 	@Override
