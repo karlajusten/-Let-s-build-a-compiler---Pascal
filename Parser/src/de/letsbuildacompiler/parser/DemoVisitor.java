@@ -63,6 +63,13 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariable(DemoParser.VariableContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Or}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOr(DemoParser.OrContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link DemoParser#expression}.
 	 * @param ctx the parse tree
@@ -76,6 +83,13 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMult(DemoParser.MultContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code And}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnd(DemoParser.AndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Relational}
 	 * labeled alternative in {@link DemoParser#expression}.

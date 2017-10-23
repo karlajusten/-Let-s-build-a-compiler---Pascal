@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.letsbuildacompiler.parser.DemoBaseVisitor;
+import de.letsbuildacompiler.parser.DemoParser.AndContext;
 import de.letsbuildacompiler.parser.DemoParser.AssignmentContext;
 import de.letsbuildacompiler.parser.DemoParser.BranchContext;
 import de.letsbuildacompiler.parser.DemoParser.DivContext;
@@ -18,6 +19,7 @@ import de.letsbuildacompiler.parser.DemoParser.MainStatementContext;
 import de.letsbuildacompiler.parser.DemoParser.MinusContext;
 import de.letsbuildacompiler.parser.DemoParser.MultContext;
 import de.letsbuildacompiler.parser.DemoParser.NumberContext;
+import de.letsbuildacompiler.parser.DemoParser.OrContext;
 import de.letsbuildacompiler.parser.DemoParser.PlusContext;
 import de.letsbuildacompiler.parser.DemoParser.PrintlnContext;
 import de.letsbuildacompiler.parser.DemoParser.ProgramContext;
@@ -34,6 +36,8 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	private final FunctionList definedFunctions;
 	private int branchCounter = 0;
 	private int compareCount = 0;
+	private int andCounter = 0;
+	private int orCounter = 0;
 	
 	public MyVisitor(FunctionList definedFunctions) {
 		if (definedFunctions == null){
@@ -109,14 +113,10 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	}
 	
 	@Override
-	public String visitVarDeclaration(VarDeclarationContext ctx) {
-		if (variables.containsKey(ctx.varName.getText())) {
-			throw new VariableAlreadyDefinedException(ctx.varName);
-		}
-		variables.put(ctx.varName.getText(), variables.size());
-		return "";
+	public String visitVariable(VariableContext ctx) {
+		return "iload " + requireVariableIndex(ctx.varName);
 	}
-	
+		
 	@Override
 	public String visitBranch(BranchContext ctx) {
 		String conditionInstructions = visit(ctx.condition);
@@ -147,17 +147,6 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	}
 	
 	@Override
-	public String visitAssignment(AssignmentContext ctx) {
-		return visit(ctx.expr) + "\n" +
-				"istore " + requireVariableIndex(ctx.varName);
-	}
-	
-	@Override
-	public String visitVariable(VariableContext ctx) {
-		return "iload " + requireVariableIndex(ctx.varName);
-	}
-	
-	@Override
 	public String visitFunctionCall(FunctionCallContext ctx) {
 		int numberOfParameters = ctx.arguments.expressions.size();
 		if (!definedFunctions.contains(ctx.funcName.getText(), numberOfParameters)){
@@ -175,6 +164,80 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		return instructions;
 	}
 	
+	/*
+	 * ldc a
+	 * ifeq onAndFalse
+	 * ldc b
+	 * ifeq onAndFalse
+	 * ldc 1
+	 * goto andEnd
+	 * onAndFalse:
+	 * ldc 0
+	 * andEnd:
+	 */
+	@Override
+	public String visitAnd(AndContext ctx) {
+		String left = visit(ctx.left);
+		String right = visit(ctx.right);
+		int andNum = andCounter;
+		++andCounter;
+		
+		return  left + "\n" + 
+				"ifeq onAndFalse" + andNum + "\n" + 
+				right + "\n" + 
+				"ifeq onAndFalse" + andNum + "\n" + 
+				"ldc 1\n" + 
+				"goto andEnd" + andNum + "\n" + 
+				"onAndFalse" + andNum + ":\n" + 
+				"ldc 0\n" + 
+				"andEnd" + andNum + ":"; 
+	}
+	
+	
+	/**
+	 * ldc a
+		ifne onOrTrue
+		ldc b
+		ifne onOrTrue
+		ldc 0
+		goto orEnd
+		onOrTrue: 
+		ldc1
+		orEnd:
+	 */		
+	@Override
+	public String visitOr(OrContext ctx) {
+		String left = visit(ctx.left);
+		String right = visit(ctx.right);
+		int orNum = orCounter ;
+		++orCounter;
+		
+		return left + "\n" + 
+				"ifne onOrTrue" + orNum + "\n" + 
+				right + "\n" + 
+				"ifne onOrTrue" + orNum + "\n" + 
+				"ldc 0\n" + 
+				"goto orEnd" + orNum + "\n" + 
+				"onOrTrue" + orNum + ": \n" + 
+				"ldc 1\n" + 
+				"orEnd" + orNum + ":";
+	}
+	
+	@Override
+	public String visitVarDeclaration(VarDeclarationContext ctx) {
+		if (variables.containsKey(ctx.varName.getText())) {
+			throw new VariableAlreadyDefinedException(ctx.varName);
+		}
+		variables.put(ctx.varName.getText(), variables.size());
+		return "";
+	}
+	
+	@Override
+	public String visitAssignment(AssignmentContext ctx) {
+		return visit(ctx.expr) + "\n" +
+				"istore " + requireVariableIndex(ctx.varName);
+	}
+		
 	@Override
 	public String visitFunctionDefinition(FunctionDefinitionContext ctx) {
 		Map<String, Integer> oldVariables = variables;
