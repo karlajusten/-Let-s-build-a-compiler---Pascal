@@ -1,6 +1,12 @@
-int randomNumber() {
-  int i;
+program simpleFunction;
+function randomNumber(): int; 
+VAR
+i: int;
+BEGIN
   i = 4;
   return i;
-}
-println(randomNumber());
+END;
+
+BEGIN 
+	writeln(randomNumber());
+END.

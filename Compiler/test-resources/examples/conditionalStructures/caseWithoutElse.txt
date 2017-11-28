@@ -1,0 +1,18 @@
+{ Fonte: https://pt.wikibooks.org/wiki/Pascal/Estrutura_Condicional
+Um simples exemplo de como se trabalha com a Estrutura Case }
+
+program caseStatementWithoutElse;
+
+   VAR 
+	  X : int;
+   
+   BEGIN
+     X = 1;
+     
+     CASE X OF
+          1 : BEGIN writeln("Hello Word"); 	END;		{ E o valor de X for igual a 1, irá executar essa linha }
+          2 : BEGIN writeln("GNOIA");   	END;  		{ X = 2, essa linha será executada }
+          3 : BEGIN writeln("Open Source");	END;		{ X = 3, essa linha será executada }
+     END;
+     
+   END.

@@ -1,22 +1,37 @@
 grammar Demo;
 
-program: programPart+;
+program: 'program' programName=IDENTIFIER ';'  
+		 mainConstDeclaration=blockConstDeclaration?
+		 mainVarDeclaration=blockVarDeclaration?					
+		 mainFunctionDeclaration=functionDefinition*  				    
+		 'BEGIN'
+		 		programPart
+		 'END.'
+		 ;
 
-programPart: statement      	#MainStatement
-		   | functionDefinition #ProgPartFunctionDefinition
+programPart: statement+      	  #MainStatement
 		   ;
 
-statement: println ';' 
-         | varDeclaration ';' 
+statement: writeln ';' 
          | assignment ';' 
          | branch
-         | print ';' 
+         | write ';' 
+         | whileStatement ';'
+         | caseStatement
          ;
-         
-branch: 'if' '(' condition=expression ')' onTrue=block 'else' onFalse=block 
+
+caseStatement: 'CASE' selector=IDENTIFIER 'OF' 
+					(target=NUMBER ': BEGIN' doTarget=statement+ 'END;')+
+					('ELSE BEGIN' doElse=statement 'END;')?
+				'END;'
+				;
+
+whileStatement: 'while'  conditionWhile=expression 'do' 'BEGIN' comandsTorepeat=block 'END;' ;
+
+branch: 'if' '(' condition=expression ') then' 'BEGIN' onTrue=block 'END' 'else' 'BEGIN' onFalse=block 'END;'
       ;
 
-block: '{' statement* '}' ;
+block: statement*  ;
 
 expression: left=expression '/' right=expression #Div
 		  | left=expression '*' right=expression #Mult
@@ -28,19 +43,24 @@ expression: left=expression '/' right=expression #Div
 		  | number=NUMBER  #Number
 		  | txt=STRING #String
 		  | varName=IDENTIFIER #Variable
+		  | constName=IDENTIFIER #Constant
 		  | functionCall #funcCallExpression
 		  ;
 
-varDeclaration: 'int' varName=IDENTIFIER ;
+blockVarDeclaration: 'VAR' (varDeclaration ';')+ ;
+blockConstDeclaration: 'CONST' (constDeclaration ';')+;
+
+varDeclaration: varName=IDENTIFIER ':''int' ;
+constDeclaration: constName=IDENTIFIER '=' constValue=NUMBER;
 
 assignment: varName=IDENTIFIER '=' expr=expression;
 
-println: 'println(' argument=expression ')';
+writeln: 'writeln(' argument=expression ')';
 
-print: 'print(' argument=expression ')';
+write: 'write(' argument=expression ')';
 
 
-functionDefinition: 'int' funcName=IDENTIFIER '(' params=parameterDeclaration ')' '{' statements=statementList 'return' returnValue=expression ';' '}' ;
+functionDefinition: 'function' funcName=IDENTIFIER '(' params=parameterDeclaration '): int;' bconstDec=blockConstDeclaration? bvarDec=blockVarDeclaration? 'BEGIN' statements=statementList 'return' returnValue=expression ';' 'END;' ;
 
 parameterDeclaration: declarations+=varDeclaration ( ',' declarations+=varDeclaration)*
 					| 
@@ -56,5 +76,7 @@ expressionList: expressions+=expression ( ',' expressions+=expression)*
 
 IDENTIFIER: [a-zA-Z] [a-zA-Z0-9]* ;
 NUMBER: [0-9]+;
+COMMENT: '{' .*? '}' -> skip;
+
 WHITESPACE: [ \t\n\r]+ -> skip;
 STRING: '"' .*? '"' ;

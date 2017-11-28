@@ -24,18 +24,23 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMainStatement(DemoParser.MainStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ProgPartFunctionDefinition}
-	 * labeled alternative in {@link DemoParser#programPart}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProgPartFunctionDefinition(DemoParser.ProgPartFunctionDefinitionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link DemoParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatement(DemoParser.StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#caseStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCaseStatement(DemoParser.CaseStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#whileStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStatement(DemoParser.WhileStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DemoParser#branch}.
 	 * @param ctx the parse tree
@@ -84,6 +89,13 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMult(DemoParser.MultContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Constant}
+	 * labeled alternative in {@link DemoParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstant(DemoParser.ConstantContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code And}
 	 * labeled alternative in {@link DemoParser#expression}.
 	 * @param ctx the parse tree
@@ -126,11 +138,29 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncCallExpression(DemoParser.FuncCallExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link DemoParser#blockVarDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockVarDeclaration(DemoParser.BlockVarDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#blockConstDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockConstDeclaration(DemoParser.BlockConstDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DemoParser#varDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVarDeclaration(DemoParser.VarDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DemoParser#constDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstDeclaration(DemoParser.ConstDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DemoParser#assignment}.
 	 * @param ctx the parse tree
@@ -138,17 +168,17 @@ public interface DemoVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(DemoParser.AssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DemoParser#println}.
+	 * Visit a parse tree produced by {@link DemoParser#writeln}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrintln(DemoParser.PrintlnContext ctx);
+	T visitWriteln(DemoParser.WritelnContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DemoParser#print}.
+	 * Visit a parse tree produced by {@link DemoParser#write}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrint(DemoParser.PrintContext ctx);
+	T visitWrite(DemoParser.WriteContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DemoParser#functionDefinition}.
 	 * @param ctx the parse tree

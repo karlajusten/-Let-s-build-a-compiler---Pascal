@@ -1,0 +1,11 @@
+program whileStatementLessEqual;
+VAR
+	x: int;
+BEGIN	
+	x = 0;
+	while x<=10 do
+	BEGIN 
+		x = x + 1; 
+	END;
+	writeln(x);
+END.

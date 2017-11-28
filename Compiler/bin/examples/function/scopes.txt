@@ -1,9 +1,17 @@
-int randomNumber() {
-  int i;
+program scopes;
+VAR
+	i: int;
+	
+function randomNumber(): int;
+VAR
+ i: int;
+BEGIN
   i = 4;
   return i;
-}
-int i;
-i = 42;
-println(randomNumber());
-println(i);
+END;
+	
+BEGIN 
+	i = 42;
+	writeln(randomNumber());
+	writeln(i);
+END.

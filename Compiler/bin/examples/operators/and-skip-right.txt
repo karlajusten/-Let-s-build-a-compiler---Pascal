@@ -1,5 +1,10 @@
-int x(int i) {
-	println(i);
+program compiler;
+function x(i: int): int;
+BEGIN
+	writeln(i);
 	return i;
-}
-println(x(0) && x(0));
+END;
+	
+BEGIN 	
+	writeln(x(0) && x(0));
+END.

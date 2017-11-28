@@ -1,9 +1,10 @@
 package de.letsbuildacompiler.compiler;
 
-import java.util.Collections;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -11,7 +12,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import de.letsbuildacompiler.parser.DemoBaseVisitor;
 import de.letsbuildacompiler.parser.DemoParser.AndContext;
 import de.letsbuildacompiler.parser.DemoParser.AssignmentContext;
+import de.letsbuildacompiler.parser.DemoParser.BlockConstDeclarationContext;
+import de.letsbuildacompiler.parser.DemoParser.BlockVarDeclarationContext;
 import de.letsbuildacompiler.parser.DemoParser.BranchContext;
+import de.letsbuildacompiler.parser.DemoParser.CaseStatementContext;
+import de.letsbuildacompiler.parser.DemoParser.ConstDeclarationContext;
+import de.letsbuildacompiler.parser.DemoParser.ConstantContext;
 import de.letsbuildacompiler.parser.DemoParser.DivContext;
 import de.letsbuildacompiler.parser.DemoParser.FunctionCallContext;
 import de.letsbuildacompiler.parser.DemoParser.FunctionDefinitionContext;
@@ -21,26 +27,31 @@ import de.letsbuildacompiler.parser.DemoParser.MultContext;
 import de.letsbuildacompiler.parser.DemoParser.NumberContext;
 import de.letsbuildacompiler.parser.DemoParser.OrContext;
 import de.letsbuildacompiler.parser.DemoParser.PlusContext;
-import de.letsbuildacompiler.parser.DemoParser.PrintContext;
-import de.letsbuildacompiler.parser.DemoParser.PrintlnContext;
+import de.letsbuildacompiler.parser.DemoParser.WriteContext;
+import de.letsbuildacompiler.parser.DemoParser.WritelnContext;
 import de.letsbuildacompiler.parser.DemoParser.ProgramContext;
 import de.letsbuildacompiler.parser.DemoParser.RelationalContext;
 import de.letsbuildacompiler.parser.DemoParser.StringContext;
 import de.letsbuildacompiler.parser.DemoParser.VarDeclarationContext;
 import de.letsbuildacompiler.parser.DemoParser.VariableContext;
-import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
+import de.letsbuildacompiler.parser.DemoParser.WhileStatementContext;
+import de.letsbulidacompiler.compiler.exceptions.ConstantAlreadyDefinedException;
+import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableOrConstantException;
 import de.letsbulidacompiler.compiler.exceptions.UndefinedFunctionException;
 import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
 
 public class MyVisitor extends DemoBaseVisitor<String>{
 	
 	private Map<String, Integer> variables = new HashMap<>();
+	private Map<String, Integer> constants = new HashMap<>();
 	private JvmStack jvmStack = new JvmStack();
 	private final FunctionList definedFunctions;
 	private int branchCounter = 0;
+	private int whileCounter = 0;
 	private int compareCount = 0;
 	private int andCounter = 0;
 	private int orCounter = 0;
+	private String programName = "";
 	
 	public MyVisitor(FunctionList definedFunctions) {
 		if (definedFunctions == null){
@@ -50,7 +61,7 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	}
 
 	@Override
-	public String visitPrintln(PrintlnContext ctx) {
+	public String visitWriteln(WritelnContext ctx) {
 		String argumentInstructions = visit(ctx.argument);
 		DataType type = jvmStack.pop();
 		return "  getstatic java/lang/System/out Ljava/io/PrintStream;\n" + 
@@ -60,7 +71,7 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		}
 	
 	@Override
-	public String visitPrint(PrintContext ctx) {
+	public String visitWrite(WriteContext ctx) {
 		String argumentInstructions = visit(ctx.argument);
 		DataType type = jvmStack.pop();
 		return "  getstatic java/lang/System/out Ljava/io/PrintStream;\n" + 
@@ -158,9 +169,68 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	@Override
 	public String visitVariable(VariableContext ctx) {
 		jvmStack.push(DataType.INT);
-		return "iload " + requireVariableIndex(ctx.varName);
-	}
 		
+		return "iload " + requireVariableorConstantIndex(ctx.varName);
+	}
+	
+	@Override
+	public String visitConstant(ConstantContext ctx) {
+		jvmStack.push(DataType.INT);
+		return "iload " + requireVariableorConstantIndex(ctx.constName);
+		
+	}
+	
+	@Override
+	public String visitCaseStatement(CaseStatementContext ctx) {		
+		int compareNum = compareCount;
+		++compareCount;
+		
+		jvmStack.push(DataType.INT);
+		String instructions = "iload " + requireVariableorConstantIndex(ctx.selector) + "\n";
+				
+		int i = 3 ;
+		System.out.println("AKI!! " + programName + "\n");
+		while(i < ctx.getChildCount()-1 ){
+			System.out.println("child " + i + ": " + ctx.getChild(i).getText() + "\n");
+			
+			jvmStack.push(DataType.INT);
+			
+		    instructions += "ldc " + ctx.getChild(i).getText() + "\n" +
+		    "if_icmpeq" + " onTrue" + compareNum + "case" + i + "\n" +
+	 	    "goto onFalse" + compareNum + "case" + i + "\n" +
+	 	    "onTrue" + compareNum + "case" + i + ":\n" +
+		    visit(ctx.getChild(i+2)) + "\n" +
+		    "goto EndCase" + compareNum  + "\n" +
+	 	    "onFalse"  + compareNum + "case" + i + ":\n"; 
+	 	   
+		    i = i + 4;
+		    jvmStack.pop();
+		    
+		}
+		
+		instructions += "goto EndCase" + compareNum  + ":\n"; 
+		
+		return instructions;
+	}
+
+	@Override
+	public String visitWhileStatement(WhileStatementContext ctx) {
+		String conditionInstructions = visit(ctx.conditionWhile);
+		jvmStack.pop();
+		String comandsInstruction = visit(ctx.comandsTorepeat);
+		int whileNum = whileCounter;
+		++whileCounter;
+		//String whileReturn = 
+		
+		return "condWhile" + whileNum + ":\n" + 
+		    conditionInstructions + "\n" +
+			"ifne trueWhile" + whileNum + "\n" +
+			"goto endWhile" + whileNum + "\n" +
+			"trueWhile" + whileNum + ":\n" +
+			comandsInstruction + "\n" +
+			"goto condWhile" + whileNum + "\n" +
+			"endWhile" + whileNum + ":\n";
+	}
 	
 	/* 
 	 * Structure Example:
@@ -204,7 +274,7 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		if (argumentsInstructions != null) {
 			instructions += argumentsInstructions + '\n';
 		}
-		instructions += "invokestatic HelloWorld/" + ctx.funcName.getText() + "(";
+		instructions += "invokestatic " + programName + "/" + ctx.funcName.getText() + "(";
 		instructions += stringRepeat("I", numberOfParameters);
 		instructions += ")I";
 		for(int i = 0; i < numberOfParameters; ++i ){
@@ -280,20 +350,34 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 				"ldc 1\n" + 
 				"orEnd" + orNum + ":";
 	}
-	
+		
 	@Override
 	public String visitVarDeclaration(VarDeclarationContext ctx) {
 		if (variables.containsKey(ctx.varName.getText())) {
 			throw new VariableAlreadyDefinedException(ctx.varName);
 		}
 		variables.put(ctx.varName.getText(), variables.size());
+		
 		return "";
+	}
+	
+	@Override
+	public String visitConstDeclaration(ConstDeclarationContext ctx) {
+		if (constants.containsKey(ctx.constName.getText())) {
+			throw new ConstantAlreadyDefinedException(ctx.constName);
+		}
+		constants.put(ctx.constName.getText(), constants.size());
+		
+		String instructions = visit(ctx.constValue) + "\n" +
+				"istore " + requireVariableorConstantIndex(ctx.constName);
+		jvmStack.pop();
+		return instructions;
 	}
 	
 	@Override
 	public String visitAssignment(AssignmentContext ctx) {
 		String instructions = visit(ctx.expr) + "\n" +
-				"istore " + requireVariableIndex(ctx.varName);
+				"istore " + requireVariableorConstantIndex(ctx.varName);
 		jvmStack.pop();
 		return instructions;
 	}
@@ -305,7 +389,11 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 		variables = new HashMap<>();
 		jvmStack = new JvmStack();
 		visit(ctx.params);
-		String statementInstructions = visit(ctx.statements);
+		String statementInstructions = "";
+		if(ctx.bvarDec != null){
+			statementInstructions = visit(ctx.bvarDec);
+		}
+		statementInstructions = visit(ctx.statements);
 		String result = ".method public static " + ctx.funcName.getText() + "(";
 		int numberOfParameters = ctx.params.declarations.size();
 		result += stringRepeat("I", numberOfParameters);
@@ -334,32 +422,90 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 	public String visitProgram(ProgramContext ctx) {
 		String mainCode = "";
 		String functions = "";
-		for(int i = 0; i < ctx.getChildCount(); ++i) {
-			ParseTree child = ctx.getChild(i);
-			String instructions = visit(child);
-			if (child instanceof MainStatementContext) {
-				mainCode += instructions + "\n";
-			} else {
-				functions += instructions + "\n";
+		programName = ctx.programName.getText();
+		
+		int i = 3;
+		
+		/* Have Constants Declarations*/
+		if(ctx.getChild(i) instanceof BlockConstDeclarationContext){
+			
+			while(!ctx.getChild(i).getText().equals("VAR")
+					&& !ctx.getChild(i).getText().equals("function")
+					&& !ctx.getChild(i).getText().equals("BEGIN")){
+				//AQUI: indo para assigment em vez de constant;
+				mainCode = visit(ctx.getChild(i)) + "\n";
+				i++;
+			}
+			i++;
+		}
+		
+		/* Have Variables Declarations*/
+		if(ctx.getChild(i) instanceof BlockVarDeclarationContext){
+			
+			while(!ctx.getChild(i).getText().equals("BEGIN") && !ctx.getChild(i).getText().equals("function")){
+				mainCode = visit(ctx.getChild(i)) + "\n";
+				i++;
+			}
+			i++;
+		}
+		
+		if (ctx.getChild(i) instanceof FunctionDefinitionContext){ /* Don't have Variables Declarations, have functions*/ 
+						
+			while(!ctx.getChild(i).getText().equals("BEGIN")){
+				functions = visit(ctx.getChild(i)) + "\n";
+				i++;
+			}
+			
+			i++;			
+		}
+		
+		if (ctx.mainConstDeclaration == null && ctx.mainVarDeclaration == null && ctx.mainFunctionDeclaration == null){
+			i = 4;
+		}
+		
+		if (ctx.getChild(i) instanceof MainStatementContext){ 	/* Main block */
+			while(i < ctx.getChildCount()-1) {
+				ParseTree child = ctx.getChild(i);
+				String instructions = visit(child);
+				if (child instanceof MainStatementContext) {
+					mainCode += instructions + "\n";
+				}
+				i++;
 			}
 		}
-		return functions + "\n" +
-		".method public static main([Ljava/lang/String;)V\n" + 
-		"  .limit stack 100\n" + 
-		"  .limit locals 100\n" + 
-		"  \n" + 
-		 mainCode + "\n" + 
-		"  return\n" + 
-		"  \n" + 
-		".end method";
+		
+		String result = ".class public " + programName +"\n" +
+				".super java/lang/Object\n" +
+				"\n" + functions + "\n" +
+				".method public static main([Ljava/lang/String;)V\n" + 
+				"  .limit stack 100\n" + 
+				"  .limit locals 100\n" + 
+				"  \n" + 
+				 mainCode + "\n" + 
+				"  return\n" + 
+				"  \n" + 
+				".end method";
+		
+		try {
+			createFile(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+		
+		return result;
 	}
 	
-	private int requireVariableIndex(Token varNameToken) {
-		Integer varIndex = variables.get(varNameToken.getText());
-		if (varIndex == null) {
-			throw new UndeclaredVariableException(varNameToken);
+
+	private int requireVariableorConstantIndex(Token NameToken) {
+		Integer index = variables.get(NameToken.getText());		
+		if (index == null) {
+			index = constants.get(NameToken.getText());
+			if (index == null){
+				throw new UndeclaredVariableOrConstantException(NameToken);
+			}
 		}
-		return varIndex;
+		return index;
 	}
 	
 	@Override
@@ -371,6 +517,18 @@ public class MyVisitor extends DemoBaseVisitor<String>{
 			return aggregate;
 		}
 		return aggregate + "\n" + nextResult;
+	}
+	
+	public void createFile(String result) throws IOException{
+		/*Create file:*/
+		String nameProg = result.substring(14,result.indexOf(".", 14)-2);
+		System.out.println("##Name = " + nameProg);
+		
+
+		FileWriter arq = new FileWriter("../Testes/" + nameProg + ".j");
+		PrintWriter gravarArq = new PrintWriter(arq);
+		gravarArq.printf(result);
+		arq.close(); 
 	}
 	
 }

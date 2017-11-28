@@ -1,4 +1,16 @@
-int x() { return 0; }
-int x(int a) { return a; }
-println(x());
-println(x(42));
+program overloading;
+
+function x(): int;
+BEGIN 
+	return 0; 
+END;
+
+function x(a: int): int;
+BEGIN 
+	return a; 
+END;
+
+BEGIN 
+	writeln(x());
+	writeln(x(42));
+END.

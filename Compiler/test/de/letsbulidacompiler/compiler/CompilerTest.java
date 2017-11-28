@@ -17,8 +17,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import de.letsbuildacompiler.compiler.Main;
+import de.letsbulidacompiler.compiler.exceptions.ConstantAlreadyDefinedException;
 import de.letsbulidacompiler.compiler.exceptions.FunctionAlreadyDefinedException;
-import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableException;
+import de.letsbulidacompiler.compiler.exceptions.UndeclaredVariableOrConstantException;
 import de.letsbulidacompiler.compiler.exceptions.UndefinedFunctionException;
 import de.letsbulidacompiler.compiler.exceptions.VariableAlreadyDefinedException;
 import jasmin.ClassFile;
@@ -60,49 +61,61 @@ public class CompilerTest {
 	  
   }
   
-  	@Test(expectedExceptions = UndeclaredVariableException.class,
-			expectedExceptionsMessageRegExp = "1:8 undeclared variable <x>")
+  	@Test(expectedExceptions = UndeclaredVariableOrConstantException.class,
+			expectedExceptionsMessageRegExp = "1:32 undeclared variable <x>")
 	public void compilingCode_throwsUndeclaredVariableException_ifReadingUndefinedVariable() throws Exception {
 		// execution
-		compileAndRun("println(x);");
+		compileAndRun("program compiler; BEGIN writeln(x); END.");
 		
 		// evaluation performed by expected exception
 	}
   
-  	@Test(expectedExceptions = UndeclaredVariableException.class,
-			expectedExceptionsMessageRegExp = "1:0 undeclared variable <x>")
+  	@Test(expectedExceptions = UndeclaredVariableOrConstantException.class,
+			expectedExceptionsMessageRegExp = "1:24 undeclared variable <x>")
 	public void compilingCode_throwsUndeclaredVariableException_ifWrintingUndefinedVariable() throws Exception {
 		// execution
-		compileAndRun("x = 5;");
+		compileAndRun("program compiler; BEGIN x = 5; END.");
 		
 		// evaluation performed by expected exception
 	}
   	
   	@Test(expectedExceptions = VariableAlreadyDefinedException.class,
-			expectedExceptionsMessageRegExp = "2:4 variable already defined: <x>")
+			expectedExceptionsMessageRegExp = "2:0 variable already defined: <x>")
 	public void compilingCode_throwsVariableAlreadyDefinedException_whenDefiningAlreadyDefinedVariable() throws Exception {
 		// execution
-		compileAndRun("int x;" + System.lineSeparator() +
-		              "int x;");
+		compileAndRun("program VariableAlreadyDefinedException; VAR x: int; " + System.lineSeparator() +
+		              "x: int; BEGIN x = 0; END.");
+		
+		// evaluation performed by expected exception
+	}
+  	
+  	@Test(expectedExceptions = ConstantAlreadyDefinedException.class,
+			expectedExceptionsMessageRegExp = "2:0 constant already defined: <x>")
+	public void compilingCode_throwsConstantAlreadyDefinedException_whenDefiningAlreadyDefinedConstant() throws Exception {
+		// execution
+		compileAndRun("program ConstantAlreadyDefinedException; CONST x = 10; " + System.lineSeparator() +
+		              "x = 5; BEGIN writeln(x); END.");
 		
 		// evaluation performed by expected exception
 	}
   	
   	@Test(expectedExceptions = UndefinedFunctionException.class,
-			expectedExceptionsMessageRegExp = "1:8 call to undefined function: <someUndefinedFunction>")
+			expectedExceptionsMessageRegExp = "1:32 call to undefined function: <someUndefinedFunction>")
 	public void compilingCode_throwsUndefinedFunctionException_whenCallingUndefinedFunction() throws Exception {
 		// execution
-		compileAndRun("println(someUndefinedFunction());");
+		compileAndRun("program compiler; BEGIN writeln(someUndefinedFunction()); END.");
 		
 		// evaluation performed by expected exception
 	}
   	
   	@Test(expectedExceptions = FunctionAlreadyDefinedException.class,
-			expectedExceptionsMessageRegExp = "2:4 function already defined: <x>")
+			expectedExceptionsMessageRegExp = "3:9 function already defined: <x>")
 	public void compilingCode_throwsFunctionAlreadyDefinedException_whenDefiningFunctionTwice() throws Exception {
 		// execution
-		compileAndRun("int x() { return 42; }\n" +
-					  "int x() { return 42; }");
+		compileAndRun("program compiler;\n" + 
+				  "function x(): int; BEGIN return 42; END;\n" +
+				  "function x(): int; BEGIN return 24; END;\n" + 
+				  "BEGIN writeln(x()); END.");
 		
 		// evaluation performed by expected exception
 	}
@@ -112,65 +125,58 @@ public class CompilerTest {
   public Object[][] provide_code_expectedText() throws Exception {
 		return new Object[][]{
 			{"plus", 
-				"println(1+2);", "3" + System.lineSeparator()},
+				"program Plus; BEGIN writeln(1+2); END.", "3" + System.lineSeparator()},
 			
 			{"chained plus", 
-					"println(1+2+42);", "45" + System.lineSeparator()},
+					"program chainedPlus; BEGIN writeln(1+2+42); END.", "45" + System.lineSeparator()},
 			
 			{"multiple statements", 
-						"println(1); println(2);",
+						"program compiler; BEGIN writeln(1); writeln(2); END.",
 				"1" + System.lineSeparator() +
 				"2" + System.lineSeparator()},
 			
 			{"minus", 
-					"println(3-2);", "1" + System.lineSeparator()},
+					"program minus; BEGIN writeln(3-2); END.", "1" + System.lineSeparator()},
 			
 			{"times", 
-					"println(2*3);", "6" + System.lineSeparator()},
+					"program times; BEGIN writeln(2*3); END.", "6" + System.lineSeparator()},
 			
 			{"divide", 
-					"println(6/2);", "3" + System.lineSeparator()},
+					"program divide; BEGIN writeln(6/2); END.", "3" + System.lineSeparator()},
 			
 			{"divide and truncate", 
-					"println(7/2);", "3" + System.lineSeparator()},
+					"program divideAndTruncate; BEGIN writeln(7/2); END.", "3" + System.lineSeparator()},
 			
 			{"precedence times and divide", 
-					"println(8/2*4);", "16" + System.lineSeparator()},
+					"program timesAndDivide; BEGIN writeln(8/2*4); END.", "16" + System.lineSeparator()},
 			
 			{"precedence plus and times",
-					"println(2+3*3);", "11" + System.lineSeparator()},
+					"program plusAndTimes; BEGIN writeln(2+3*3); END.", "11" + System.lineSeparator()},
 			
 			{"precedence minus and times",
-					"println(9-2*3);", "3" + System.lineSeparator()},
+					"program minusAndTimes; BEGIN writeln(9-2*3); END.", "3" + System.lineSeparator()},
 			
 			{"precedence minus and plus",
-					"println(8-2+5);", "11" + System.lineSeparator()},
+					"program minusAndPlus; BEGIN writeln(8-2+5); END.", "11" + System.lineSeparator()},
 			
 			{"int variable",
-					"int foo; foo = 42; println(foo);", "42" + System.lineSeparator()},
+					"program intVariable; VAR foo: int; BEGIN foo = 42; writeln(foo); END.", "42" + System.lineSeparator()},
 			
 			{"add var and constant parameter", 
-					"int foo; foo = 42; println(foo+2);", "44" + System.lineSeparator()},
+					"program addVarAndConstantParameter; VAR foo: int; BEGIN foo = 42; writeln(foo+2); END.", "44" + System.lineSeparator()},
 			
 			{"add two vars parameter",
-					"int a; int b; a = 2; b = 5; println(a+b);", "7" + System.lineSeparator()},
+					"program addTwoVarsParameter; VAR a: int; b: int; BEGIN a = 2; b = 5; writeln(a+b); END.", "7" + System.lineSeparator()},
 			
 			{"return only function",
-					"int randomNumber() { return 4; } println(randomNumber());", "4" + System.lineSeparator()},
+					"program returnOnlyFunction; function randomNumber(): int; BEGIN return 4; END; "
+					+ "BEGIN writeln(randomNumber()); END.", "4" + System.lineSeparator()},
 			
 			example("function/simple_function", 
 				"4" + System.lineSeparator()),
 			
-			example("function/scopes", 
-						"4" + System.lineSeparator() +
-						"42" + System.lineSeparator()),
-			
 			example("function/int_parameters",
 					"13" + System.lineSeparator()),
-			
-			example("function/overloading",
-					"0" + System.lineSeparator() +
-					"42" + System.lineSeparator()),
 			
 			example("branch/if_int_false",
 					"42" + System.lineSeparator()),
@@ -179,46 +185,76 @@ public class CompilerTest {
 					"81" + System.lineSeparator()),
 			
 			{"lower than true",
-					"println(1 < 2);", "1" + System.lineSeparator()}, 
+					"program compiler; BEGIN writeln(1 < 2); END.", "1" + System.lineSeparator()}, 
 			
 			{"lower than false",
-						"println(2 < 2);", "0" + System.lineSeparator()}, 
+						"program compiler; BEGIN writeln(2 < 2); END.", "0" + System.lineSeparator()}, 
 				
 			{"lower than or equal true",
-							"println(2 <= 2);", "1" + System.lineSeparator()}, 
+							"program compiler; BEGIN writeln(2 <= 2); END.", "1" + System.lineSeparator()}, 
 					
 			{"lower than or equal false",
-						"println(3 <= 2);", "0" + System.lineSeparator()}, 
+						"program compiler; BEGIN writeln(3 <= 2); END.", "0" + System.lineSeparator()}, 
 			
 			{"greater than true",
-							"println(3 > 2);", "1" + System.lineSeparator()}, 
+							"program compiler; BEGIN writeln(3 > 2); END.", "1" + System.lineSeparator()}, 
 					
 			{"greater than false",
-						"println(2 > 2);", "0" + System.lineSeparator()},
+						"program compiler; BEGIN writeln(2 > 2); END.", "0" + System.lineSeparator()},
 			
 			{"greater than or equal true",
-						"println(2 >= 2);", "1" + System.lineSeparator()}, 
+						"program compiler; BEGIN writeln(2 >= 2); END.", "1" + System.lineSeparator()}, 
 					
 			{"greater than or equal false",
-						"println(1 >= 2);", "0" + System.lineSeparator()}, 
+						"program compiler; BEGIN writeln(1 >= 2); END.", "0" + System.lineSeparator()}, 
 			
 
-			{ "and true", "println(1 && 1);", "1" + System.lineSeparator()},
-			{ "and left false", "println(0 && 1);", "0" + System.lineSeparator()},			
-			{ "and right false", "println(1 && 0);", "0" + System.lineSeparator()},
+			{ "and true", "program compiler; BEGIN writeln(1 && 1); END.", "1" + System.lineSeparator()},
+			{ "and left false", "program compiler; BEGIN writeln(0 && 1); END.", "0" + System.lineSeparator()},			
+			{ "and right false", "program compiler; BEGIN writeln(1 && 0); END.", "0" + System.lineSeparator()},
 						
-			{ "or false", "println(0 || 0);", "0" + System.lineSeparator()},
-			{ "or left true", "println(1 || 0);", "1" + System.lineSeparator()},			
-			{ "or right true", "println(0 || 1);", "1" + System.lineSeparator()},
+			{ "or false", "program compiler; BEGIN writeln(0 || 0); END.", "0" + System.lineSeparator()},
+			{ "or left true", "program compiler; BEGIN writeln(1 || 0); END.", "1" + System.lineSeparator()},			
+			{ "or right true", "program compiler; BEGIN writeln(0 || 1); END.", "1" + System.lineSeparator()},
 			
 			example("operators/and-skip-right", "0" + System.lineSeparator() + "0" + System.lineSeparator()),
 			
 			example("operators/or-skip-right", "1" + System.lineSeparator() + "1" + System.lineSeparator()),
 			
-			{"print", "print(42);", "42"},
+			{"write", "program compiler; BEGIN write(42); END.", "42"},
 			
-			{"print string literal", "print(\"hello world\");", "hello world"},
+			{"write string literal", "program compiler; BEGIN write(\"hello world\"); END.", "hello world"},
 		
+			example("conditionalStructures/whileStatementLess",
+					"10" + System.lineSeparator()),
+			
+			example("conditionalStructures/whileStatementLessEqual",
+					"11" + System.lineSeparator()),
+			
+			{"int constante",
+				"program intConstant; CONST bla = 42; BEGIN writeln(bla); END.", "42" + System.lineSeparator()},
+		
+			{"add const", 
+				"program addConstant; CONST foo = 42; BEGIN writeln(foo+2); END.", "44" + System.lineSeparator()},
+		
+			{"add two consts",
+				"program addTwoConstants; CONST a = 2; b = 5; BEGIN writeln(a+b); END.", "7" + System.lineSeparator()},
+		
+			{"first comment",
+					"program fisrtComment; {1º Comentario} VAR foo: int; BEGIN foo = 42; writeln(foo); END.", "42" + System.lineSeparator()},
+			
+			{"second comment",
+						"program secondComment; VAR foo: int; {Second Comentario} BEGIN foo = 42; writeln(foo); END.", "42" + System.lineSeparator()},
+			
+			{"third comment",
+							"program thirdComment; VAR foo: int; BEGIN foo = 42; {Third \n Comentário} writeln(foo); END.", "42" + System.lineSeparator()},
+				
+						
+			/*example("conditionalStructures/caseWithoutElse",
+					"Hello Word" + System.lineSeparator()),
+			
+			example("conditionalStructures/caseWithElse",
+					"7" + System.lineSeparator() + "Entrou no Primeiro alvo" + System.lineSeparator()),*/
 			
 		};
 	}

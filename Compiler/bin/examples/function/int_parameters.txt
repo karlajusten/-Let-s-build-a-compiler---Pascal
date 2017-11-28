@@ -1,4 +1,10 @@
-int add(int a, int b) {
+program intParameters;
+
+function add(a: int, b: int): int;
+BEGIN
   return a+b;
-}
-println(add(5,8));
+END;
+	
+BEGIN 
+	writeln(add(5,8));
+END.

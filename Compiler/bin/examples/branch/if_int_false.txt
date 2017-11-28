@@ -1,5 +1,11 @@
-if (0) {
-  println(81);
-} else {
-  println(42);
-}
+program ifIntFalse;
+BEGIN 
+	if (0) then 
+	  BEGIN
+	  writeln(81);
+	  END
+	else 
+	  BEGIN
+	  writeln(42);
+	  END;
+END.

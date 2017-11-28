@@ -1,0 +1,37 @@
+{ Fonte: https://pt.wikibooks.org/wiki/Pascal/Estrutura_Condicional }
+
+program caseStatementWithElse;
+   VAR 
+   	 Y : int;
+   	 X : int;
+   
+   BEGIN
+     X = 1;
+     
+     CASE X OF
+          1 : BEGIN
+                Y = 7;
+                writeln(Y);
+                writeln("Entrou no Primeiro alvo");
+              END;
+   
+          2 : BEGIN
+                Y = 6;
+                writeln(Y);
+                writeln("Entrou no Segundo alvo");
+              END;
+   
+          3 : BEGIN
+          		Y = 5;
+          		writeln(Y);
+          		writeln("Entrou no Terceiro alvo");
+          	  END;
+          	  
+          ELSE BEGIN 
+          		Y = 4;
+          		writeln(Y);
+          		writeln("Entrou no Else"); 
+          	   END;
+     END;
+     
+END.
